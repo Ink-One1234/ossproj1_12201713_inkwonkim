@@ -1,6 +1,6 @@
 #! /bin/bash
 	
-	if [$# -ne 3]
+	if [ $# -ne 3 ]
 	then
 		echo "usage: ./proj1_12201713_inkwonkim file1 file2 file3"
 		exit 1
@@ -46,7 +46,13 @@ do
 		fi
 		;;
 	4)
-		echo "4"
+		for num in $(seq 1 20)
+		do
+			echo ""
+			cat teams.csv | awk -F, -v n=$num '$6==n{print n,$1}'
+			team=$(cat teams.csv | awk -F, -v n=$num '$6==n{print $1}')
+			cat players.csv | awk -F, -v t="$team" '$4==t{print $1","$7}' | sort -r -t',' -k 2 -g | head -n 1
+		done
 		;;
 	5)
 		read -p "Do you want to modify the format of date? (y/n): " check
@@ -56,12 +62,27 @@ do
 		fi
 		;;
 	6)
-		echo "6"
+		echo "1)Arsenal              11)Liverpool"
+		echo "2)Tottenham Hotspur    12)Chelsea"
+		echo "3)Manchester City      13)West Ham United"
+		echo "4)Leicester City       14)Watford"
+		echo "5)Crystal Palace       15)Newcastle United"
+		echo "6)Everton              16)Cardiff City"
+		echo "7)Burnley              17)Fulham"
+		echo "8)Southampton          18)Brighton & Hove Albion"
+		echo "9)AFC Bournemouth      19)Huddersfield"
+		echo "10)Manchester United   20)Wolvehampton Wanderers"
+		read -p "Enter your team number: " team_num
+		team=$(cat teams.csv | awk -F, -v n=$team_num 'NR==n+1{print $1}')
+		echo $team
 		;;
 	7)
 		echo "Bye!"
 		stop="Y"
 		;;
-		
+
+	*)
+		echo "Wrong Input..Please insert 1~7"
+		;;		
 	esac
 done		
